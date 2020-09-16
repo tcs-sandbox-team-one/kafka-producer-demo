@@ -4,10 +4,20 @@ spring:
   cloud:
     stream:
       kafka:
-        binder:
-          brokers: localhost:9092
+        bootstrap-servers: evtstreams-ibm-es-proxy-route-bootstrap-eventstreams.cloud-integration-224380-6fb0b86391cd68c8282858623a1dddff-0000.eu-gb.containers.appdomain.cloud:443
+        jaas:
+            enabled: true
+            login-module: org.apache.kafka.common.security.plain.PlainLoginModule
+            options:
+                password: AziCdowuQBhedmSbLgMTr-IhNZ-U_el1IOcOHZiESCNp
+                username: token
+        properties:
+            sasl:
+                mechanism: PLAIN
+            security:
+                protocol: SASL_SSL
       bindings:     
         cargoHandlingChannel2:
           destination: cargoHandlings2
-          group: cargoHandlingsQueue2   
-          contentType: 'application/json'
+          group: cargoHandlingsQueue2
+          contentType: 'application/json'     
