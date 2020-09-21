@@ -2,6 +2,12 @@ server:
   port: 9001
 spring.cloud.stream:
   function.definition: cargoHandlingChannel2
+  bindings:     
+    cargoHandlingChannel2:
+      destination: cargoHandlings2
+      binder: kafka
+      group: cargoHandlingsQueue2
+      contentType: 'application/json'
   binders:
     kafka:
       type: kafka
@@ -10,17 +16,15 @@ spring.cloud.stream:
            cloud:
              stream:
               kafka:
-                binder.brokers: localhost:9092
-                binder.jaas.loginModule: org.apache.kafka.common.security.plain.PlainLoginModule
-                binder.jaas.options.username: admin
-                binder.jaas.options.password: admin-secret
-    bindings:     
-        cargoHandlingChannel2:
-          destination: cargoHandlings2
-          binder: kafka
-          group: cargoHandlingsQueue2
-          contentType: 'application/json'
-    kafka.binder:
-      configuration:
-        security.protocol: SASL_PLAINTEXT
-        sasl.mechanism: PLAIN   
+                binder.brokers: evtstreams-ibm-es-proxy-route-broker-0-eventstreams.cloud-integration-224380-6fb0b86391cd68c8282858623a1dddff-0000.eu-gb.containers.appdomain.cloud:443
+  kafka.binder:
+    configuration:
+      security.protocol: SASL_SSL
+      sasl:
+        jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username="token" password="AziCdowuQBhedmSbLgMTr-IhNZ-U_el1IOcOHZiESCNp";
+        mechanism: PLAIN
+      ssl:
+        protocol: TLSv1.2
+        truststore:
+          location: src/main/resources/es-cert.jks
+          password: password
